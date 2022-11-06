@@ -2,10 +2,9 @@
 import fitz
 import re
 
-# https://regex101.com/
-#text = "A machine learning project"
-#search = re.search(r'\bmachine\b',text)
-#print(search)
+"""
+Source: https://www.geeksforgeeks.org/pdf-redaction-using-python/
+"""
 
 class Redactor:
 

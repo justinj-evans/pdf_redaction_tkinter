@@ -1,46 +1,39 @@
 from tkinter import *
 import tkinter as tk
+from tkinter import filedialog
 from ttkthemes import ThemedTk
-
+from tkinter.messagebox import showinfo
 from custom_pdf_view import PDFViewer
 from regex_redactor import Redactor
+import os
 import fitz
 
 class App():
     def __init__(self):
         super().__init__()
         self.window = Tk()
+        self.pdf = []
 
         # GUI Format
         self.window.title('PDF Text Redaction')
-
-        # PDF Setup
-        pdf_location = r"C:\Users\Justin Evans\Documents\Python\pdf-blinding\pdf"
-        pdf = r"\sample.pdf"
-        self.pdf = pdf_location+pdf
-        print(self.pdf)
-        self.pdf_temp = pdf_location+r"\temp.pdf"
-        doc = fitz.open(self.pdf)
-        doc.save(self.pdf_temp, encryption=fitz.PDF_ENCRYPT_KEEP)
 
         # Setup Grid of Window
         self.window.columnconfigure([0, 1, 2], minsize=100)
         self.window.rowconfigure([0, 1, 2], minsize=25)
 
-        # PDF Frame
+        # Frame - PDF
         self.frm_pdf = tk.Frame(self.window)
         self.frm_pdf.grid(row=0, column=0, rowspan=2)
 
-        lbl_pdf = tk.Label(master=self.frm_pdf, text="PDF Space")
-        lbl_pdf.pack(side=tk.TOP)
+        # PDF - Selection
+        btn_open_pdf = tk.Button(self.frm_pdf, text='Open a PDF File', command=self.select_filename)
+        btn_open_pdf.pack()
 
-        pdf1 = PDFViewer(master=self.frm_pdf, width=60, height=25, spacing3=5, bg='black')
-        pdf1.pack(side=tk.LEFT)
-        pdf1.show(self.pdf)
-
-        pdf2 = PDFViewer(master=self.frm_pdf, width=60, height=25, spacing3=5, bg='black')
-        pdf2.pack(side=tk.RIGHT)
-        pdf2.show(self.pdf)
+        # PDF - Static
+        #pdf_location = r"C:\Users\Justin Evans\Documents\Python\pdf-blinding\pdf"
+        #pdf = r"\sample.pdf"
+        #self.pdf = pdf_location+pdf
+        #print(self.pdf)
 
         # Frame: Add Item
         self.frm_options = tk.Frame()
@@ -54,17 +47,17 @@ class App():
         frm_add_item.pack()
 
         # Add Item - Submit & Enter
-        add_item = Button(frm_add_item, text="Insert", command=self.insert)
-        add_item.pack(side=tk.LEFT)
+        bt_add_button = Button(frm_add_item, text="Insert", command=self.insert)
+        bt_add_button.pack(side=tk.LEFT)
 
         self.entry_txt = tk.StringVar()
         entry = tk.Entry(frm_add_item, textvariable=self.entry_txt)
         entry.pack(side=tk.RIGHT)
 
         # Delete item from listbox
-        global my_label
-        my_label = Label(self.window, text=" ")
-        my_label.grid(row=2, column=2)
+        global lbl
+        lbl = Label(self.window, text=" ")
+        lbl.grid(row=2, column=2)
 
         # Frame: ListBox
         self.frm_listbox = tk.Frame()
@@ -78,15 +71,48 @@ class App():
         for item in self.my_list:
             self.my_listbox.insert(END, item)
 
-        my_button = Button(self.frm_options, text="Remove", command=self.delete)
-        my_button.pack()
+        btn_remove = Button(self.frm_options, text="Remove", command=self.delete)
+        btn_remove.pack()
 
         # Frame: Redaction
-        my_button = Button(self.frm_options, text="Redact PDF", command=lambda: self.redactor_button(self))
-        my_button.pack(side=tk.BOTTOM, pady=10, fill=tk.X)
-        #my_button.grid(row=, column=1)
+        btn_redact = Button(self.frm_options, text="Redact PDF", command=lambda: self.redactor_button())
+        btn_redact.pack(side=tk.BOTTOM, pady=10, fill=tk.X)
 
         self.window.mainloop()
+
+    def select_filename(self):
+        filetypes = [('PDF File', '*.pdf')]
+
+        filename = tk.filedialog.askopenfilename(
+            title='Open a file',
+            initialdir='/',
+            filetypes=filetypes)
+
+        self.pdf = filename
+        self.open_pdfs()
+
+    def open_pdfs(self):
+
+        if not os.path.exists(r'/temp'):
+            os.makedirs(r'/temp')
+            pdf_location = (r'/temp')
+        else:
+            pdf_location = (r'/temp')
+
+        self.pdf_temp = pdf_location + r"\temp.pdf"
+        doc = fitz.open(self.pdf)
+        doc.save(self.pdf_temp, encryption=fitz.PDF_ENCRYPT_KEEP)
+
+        lbl_pdf = tk.Label(master=self.frm_pdf, text="PDF Space")
+        lbl_pdf.pack(side=tk.TOP)
+
+        pdf1 = PDFViewer(master=self.frm_pdf, width=60, height=25, spacing3=5, bg='black')
+        pdf1.pack(side=tk.LEFT)
+        pdf1.show(self.pdf)
+
+        pdf2 = PDFViewer(master=self.frm_pdf, width=60, height=25, spacing3=5, bg='black')
+        pdf2.pack(side=tk.RIGHT)
+        pdf2.show(self.pdf)
 
     def insert(self):
         self.my_listbox.insert(END, self.entry_txt.get())
@@ -94,7 +120,7 @@ class App():
 
     def delete(self):
         self.my_listbox.delete(ANCHOR)
-        my_label.config(text=" ")
+        lbl.config(text=" ")
 
     def redactor_button(self):
         lst_regex = []
