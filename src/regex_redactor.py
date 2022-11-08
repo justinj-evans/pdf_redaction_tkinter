@@ -20,9 +20,6 @@ class Redactor:
     def get_sensitive_data(lines, lst_regex):
 
         """ Function to get all the lines """
-
-        # email regex
-        EMAIL_REG = r"(\bmachine\b)"
         for line in lines:
 
             for regex in lst_regex:
@@ -70,11 +67,3 @@ class Redactor:
         #doc.save('pdf/redacted.pdf')
         doc.save(self.path, incremental=True, encryption=fitz.PDF_ENCRYPT_KEEP)
         print("Successfully redacted")
-
-
-# driver code for testing
-if __name__ == "__main__":
-    # replace it with name of the pdf file
-    path = '../pdf/sample2.pdf'
-    redactor = Redactor(path,[r'(\bmachine\b)'])
-    redactor.redaction()

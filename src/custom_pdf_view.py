@@ -1,9 +1,10 @@
-# https://stackoverflow.com/questions/70302939/tkpdfviewer-open-several-pdf-in-grid-not-working-display-same-pdf-with-a-mix
-
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 import fitz
 
+"""
+Source: # https://stackoverflow.com/questions/70302939/tkpdfviewer-open-several-pdf-in-grid-not-working-display-same-pdf-with-a-mix
+"""
 # alternative to:
 # pdf_show = pdf.ShowPdf()
 # pdf_load = pdf_show.pdf_view(master=frm_pdf,load="", width=50, height=100,
