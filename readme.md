@@ -11,11 +11,11 @@ A python redaction GUI built in TKinter.
 1. Place PDF in 
 2. Use 'Open a PDF File' to select a PDF
 3. Enter text string in dialog box, press 'Insert' to add to list
-4. Select text string from dialog box and press 'Remove entered text string' to remove from list
+4. Select text string from dialog box and press 'Remove entered text string' to remove from list  
 <img src="img/main.PNG" width="300" height="250" />
 5. Submit text redaction list with 'Redact PDF'  
 <img src="img/redaction.PNG" width="450" height="250" />
-7. Redacted text fields be displayed in side-by-side comparison
+7. Redacted text fields be displayed in side-by-side comparison  
 8. Redaction PDF is automatically exported with the pdf name '_redacted'
 
 ### Acknowledgements
